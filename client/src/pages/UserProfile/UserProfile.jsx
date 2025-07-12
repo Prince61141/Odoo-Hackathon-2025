@@ -83,7 +83,7 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
 
                     <div className="user-stats">
                       <div className="stat-item">
-                        <div className="stat-number">1.2k</div>
+                        <div className="stat-number">0k</div>
                         <div className="stat-label">Reputation</div>
                       </div>
                       <div className="stat-item">
@@ -95,7 +95,7 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
                         <div className="stat-label">Answers</div>
                       </div>
                       <div className="stat-item">
-                        <div className="stat-number">89</div>
+                        <div className="stat-number">2</div>
                         <div className="stat-label">Votes</div>
                       </div>
                     </div>

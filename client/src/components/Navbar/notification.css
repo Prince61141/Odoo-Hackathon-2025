@@ -1,14 +1,26 @@
 .notification-bar {
-  position: absolute;
-  top: 60px;
-  right: 30px;
+  position: fixed;
+  top: 70px;
+  right: 24px;
   width: 320px;
+  max-width: 95vw;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  z-index: 1000;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  z-index: 2000;
   animation: fadeIn 0.2s;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .notification-bar {
+    right: 8px;
+    left: 8px;
+    width: auto;
+    min-width: 0;
+    max-width: 98vw;
+  }
 }
 
 .notification-header {
