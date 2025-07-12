@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
@@ -10,29 +8,41 @@ import Avatar from "../../components/Avatar/Avatar"
 import DisplayAnswer from "./DisplayAnswer"
 import { postAnswer, deleteQuestion, voteQuestion } from "../../actions/question"
 
+
 const QuestionsDetails = () => {
-  const { id } = useParams()
-  const questionsList = useSelector((state) => state.questionsReducer)
-  const [Answer, setAnswer] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const Navigate = useNavigate()
-  const dispatch = useDispatch()
-  const User = useSelector((state) => state.currentUserReducer)
-  const location = useLocation()
-  const url = "http://localhost:3000"
+  const { id } = useParams();
+  const questionsList = useSelector((state) => state.questionsReducer);
+  const [Answer, setAnswer] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [sortType, setSortType] = useState("newest");
+  const Navigate = useNavigate();
+  const dispatch = useDispatch();
+  const User = useSelector((state) => state.currentUserReducer);
+  const location = useLocation();
+  const url = "http://localhost:3000";
+
+  const getSortedAnswers = (answers) => {
+    if (!Array.isArray(answers)) return [];
+    if (sortType === "oldest") {
+      return [...answers].sort((a, b) => new Date(a.answeredOn) - new Date(b.answeredOn));
+    } else if (sortType === "votes") {
+      return [...answers].sort((a, b) => (b.votes || 0) - (a.votes || 0));
+    } else {
+      return [...answers].sort((a, b) => new Date(b.answeredOn) - new Date(a.answeredOn));
+    }
+  };
 
   const handlePostAns = async (e, answerLength) => {
-    e.preventDefault()
-    setIsLoading(true)
-
+    e.preventDefault();
+    setIsLoading(true);
     if (User === null) {
-      alert("Login or Signup to answer a question")
-      Navigate("/Auth")
-      setIsLoading(false)
+      alert("Login or Signup to answer a question");
+      Navigate("/Auth");
+      setIsLoading(false);
     } else {
       if (Answer === "") {
-        alert("Enter an answer before submitting")
-        setIsLoading(false)
+        alert("Enter an answer before submitting");
+        setIsLoading(false);
       } else {
         dispatch(
           postAnswer({
@@ -40,17 +50,17 @@ const QuestionsDetails = () => {
             noOfAnswers: answerLength + 1,
             answerBody: Answer,
             userAnswered: User.result.name,
-          }),
-        )
-        setAnswer("")
-        setTimeout(() => setIsLoading(false), 1500)
+          })
+        );
+        setAnswer("");
+        setTimeout(() => setIsLoading(false), 1500);
       }
     }
-  }
+  };
 
   const handleShare = () => {
-    copy(url + location.pathname)
-    alert("Copied url : " + url + location.pathname)
+    copy(url + location.pathname);
+    alert("Copied url : " + url + location.pathname);
   }
 
   const handleDelete = () => {
@@ -180,7 +190,7 @@ const QuestionsDetails = () => {
                             <Avatar backgroundColor="orange" px="8px" py="5px" borderRadius="4px">
                               {question.userPosted.charAt(0).toUpperCase()}
                             </Avatar>
-                            <div className="user-details">
+                            <div className="user-detail">
                               <div className="username">{question.userPosted}</div>
                               <div className="user-meta">asked {moment(question.askedOn).fromNow()}</div>
                             </div>
@@ -198,12 +208,12 @@ const QuestionsDetails = () => {
                         {question.noOfAnswers} {question.noOfAnswers === 1 ? "Answer" : "Answers"}
                       </h3>
                       <div className="sort-options">
-                        <button className="sort-btn active">Newest</button>
-                        <button className="sort-btn">Oldest</button>
-                        <button className="sort-btn">Votes</button>
+                        <button className={`sort-btn${sortType === "newest" ? " active" : ""}`} onClick={() => setSortType("newest")}>Newest</button>
+                        <button className={`sort-btn${sortType === "oldest" ? " active" : ""}`} onClick={() => setSortType("oldest")}>Oldest</button>
+                        <button className={`sort-btn${sortType === "votes" ? " active" : ""}`} onClick={() => setSortType("votes")}>Votes</button>
                       </div>
                     </div>
-                    <DisplayAnswer key={question._id} question={question} handleShare={handleShare} />
+                    <DisplayAnswer key={question._id} question={{...question, answer: getSortedAnswers(question.answer)}} handleShare={handleShare} />
                   </section>
                 )}
 

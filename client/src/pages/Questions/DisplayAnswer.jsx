@@ -1,5 +1,3 @@
-"use client"
-
 import moment from "moment"
 import { Link, useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
@@ -52,7 +50,7 @@ const DisplayAnswer = ({ question, handleShare }) => {
                   <Avatar backgroundColor="lightgreen" px="8px" py="5px" borderRadius="4px">
                     {ans.userAnswered.charAt(0).toUpperCase()}
                   </Avatar>
-                  <div className="user-details">
+                  <div className="user-detail">
                     <div className="username">{ans.userAnswered}</div>
                     <div className="user-meta">answered {moment(ans.answeredOn).fromNow()}</div>
                   </div>

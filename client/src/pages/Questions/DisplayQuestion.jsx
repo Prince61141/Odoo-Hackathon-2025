@@ -1,4 +1,3 @@
-"use client"
 
 import LeftSidebar from "../../components/LeftSidebar/LeftSidebar"
 import RightSidebar from "../../components/RightSidebar/RightSidebar"

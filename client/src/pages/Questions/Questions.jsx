@@ -1,4 +1,3 @@
-"use client"
 
 import "../../App.css"
 import LeftSidebar from "../../components/LeftSidebar/LeftSidebar"
