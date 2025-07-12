@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
 import users from "../models/auth.js";
+import sendEmail from "../utils/sendEmail.js";
 
 export const signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -17,6 +17,14 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
     });
+
+    // Send welcome email
+    await sendEmail(
+      email,
+      "Welcome to StackIt!",
+      `Hi ${name},\n\nWelcome to StackIt! We're glad to have you onboard.\n\nRegards,\nTeam`
+    );
+
     const token = jwt.sign(
       { email: newUser.email, id: newUser._id },
       process.env.JWT_SECRET,
@@ -24,9 +32,11 @@ export const signup = async (req, res) => {
     );
     res.status(200).json({ result: newUser, token });
   } catch (error) {
-    res.status(500).json("Something went worng...");
+    console.error("Signup error:", error);
+    res.status(500).json("Something went wrong...");
   }
 };
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
