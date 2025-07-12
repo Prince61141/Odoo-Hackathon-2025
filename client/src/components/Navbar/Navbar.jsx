@@ -46,12 +46,7 @@ const Navbar = ({ handleSlideIn }) => {
             <Link to="/" className="modern-nav-btn">
               About
             </Link>
-            <Link to="/" className="modern-nav-btn">
-              Products
-            </Link>
-            <Link to="/" className="modern-nav-btn">
-              For Teams
-            </Link>
+         
           </nav>
         </div>
         <div className="modern-header-right">

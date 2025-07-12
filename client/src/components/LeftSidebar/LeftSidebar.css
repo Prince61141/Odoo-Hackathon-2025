@@ -1,5 +1,5 @@
 .left-sidebar {
-  width: 250px;
+  /* width: 300px;
   background: rgba(17, 24, 39, 0.5);
   border: 1px solid rgba(55, 65, 81, 0.5);
   border-radius: 12px;
@@ -9,7 +9,16 @@
   position: sticky; 
   margin-top: 1.5rem;
   transition: transform 0.3s ease;
-  left: 8px;
+  left: 8px; */
+   width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: fit-content;
+  position: sticky;
+  top: 1.5rem;
+  margin-top: 1.5rem;
+  left: 5px;
 }
 
 .side-nav {

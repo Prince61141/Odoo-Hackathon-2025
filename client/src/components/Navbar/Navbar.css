@@ -4,6 +4,7 @@
   top: 0;
   z-index: 50;
   width: 100%;
+  overflow: hidden;
   background: rgba(0, 0, 0, 0.85);
   border-bottom: 1px solid #222831;
   /* backdrop-filter: blur(12px); */
@@ -84,6 +85,8 @@
   position: relative;
   display: flex;
   align-items: center;
+  color: #ffffff;
+  
 }
 
 .modern-search-icon {
@@ -92,6 +95,7 @@
   top: 50%;
   transform: translateY(-50%);
   width: 18px;
+  color: #ffffff;
   opacity: 0.6;
 }
 
@@ -99,7 +103,7 @@
   width: 220px;
   padding: 8px 12px 8px 36px;
   border-radius: 6px;
-  border: 1px solid #222831;
+  border: 1px solid #ffffff;
   background: #23272f;
   color: #fff;
   font-size: 0.95rem;
