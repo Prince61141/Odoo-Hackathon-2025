@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { useParams } from "react-router"
+import { useParams, Link } from "react-router-dom"
 import moment from "moment"
 import LeftSidebar from "../../components/LeftSidebar/LeftSidebar"
 import Avatar from "../../components/Avatar/Avatar"
@@ -13,9 +13,19 @@ import "./UsersProfile.css"
 const UserProfile = ({ slideIn, handleSlideIn }) => {
   const { id } = useParams()
   const users = useSelector((state) => state.usersReducer)
-  const currentProfile = users.filter((user) => user._id === id)[0]
+  const questions = useSelector((state) => state.questionsReducer.data)
+  const currentProfile = users.find((user) => user._id === id)
   const currentUser = useSelector((state) => state.currentUserReducer)
   const [Switch, setSwitch] = useState(false)
+  const [activeTab, setActiveTab] = useState("overview")
+
+  const userQuestions = questions?.filter((q) => q.userId === id)
+  const userAnswers = questions
+    ?.filter((q) => q.answers?.some((a) => a.userId === id))
+    .map((q) => ({
+      ...q,
+      userAnswers: q.answers.filter((a) => a.userId === id),
+    }))
 
   return (
     <div className="profile-page">
@@ -77,11 +87,11 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
                         <div className="stat-label">Reputation</div>
                       </div>
                       <div className="stat-item">
-                        <div className="stat-number">45</div>
+                        <div className="stat-number">{userQuestions?.length || 0}</div>
                         <div className="stat-label">Questions</div>
                       </div>
                       <div className="stat-item">
-                        <div className="stat-number">128</div>
+                        <div className="stat-number">{userAnswers?.length || 0}</div>
                         <div className="stat-label">Answers</div>
                       </div>
                       <div className="stat-item">
@@ -114,13 +124,79 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
               ) : (
                 <div className="profile-tabs">
                   <div className="tabs-header">
-                    <button className="tab-btn active">Overview</button>
-                    <button className="tab-btn">Activity</button>
-                    <button className="tab-btn">Questions</button>
-                    <button className="tab-btn">Answers</button>
+                    <button
+                      className={`tab-btn ${activeTab === "overview" ? "active" : ""}`}
+                      onClick={() => setActiveTab("overview")}
+                    >
+                      Overview
+                    </button>
+                    <button
+                      className={`tab-btn ${activeTab === "questions" ? "active" : ""}`}
+                      onClick={() => setActiveTab("questions")}
+                    >
+                      Questions
+                    </button>
+                    <button
+                      className={`tab-btn ${activeTab === "answers" ? "active" : ""}`}
+                      onClick={() => setActiveTab("answers")}
+                    >
+                      Answers
+                    </button>
                   </div>
+
                   <div className="tabs-content">
-                    <ProfileBio currentProfile={currentProfile} />
+                    {activeTab === "overview" && (
+                      <ProfileBio currentProfile={currentProfile} />
+                    )}
+
+                    {activeTab === "questions" && (
+                      <div className="user-questions-list">
+                        {userQuestions?.length > 0 ? (
+                          userQuestions.map((q) => (
+                            <div key={q._id} className="user-question-item">
+                              <Link
+                                to={`/questions/${q._id}`}
+                                className="question-title-link"
+                              >
+                                {q.questionTitle}
+                              </Link>
+                              <p className="question-time">
+                                Asked {moment(q.askedOn).fromNow()}
+                              </p>
+                            </div>
+                          ))
+                        ) : (
+                          <p>This user hasn't posted any questions yet.</p>
+                        )}
+                      </div>
+                    )}
+
+                    {activeTab === "answers" && (
+                      <div className="user-answers-list">
+                        {userAnswers?.length > 0 ? (
+                          userAnswers.map((q) => (
+                            <div key={q._id} className="user-answer-item">
+                              <Link
+                                to={`/questions/${q._id}`}
+                                className="question-title-link"
+                              >
+                                {q.questionTitle}
+                              </Link>
+                              {q.userAnswers.map((a, i) => (
+                                <div key={i} className="answer-body">
+                                  <p>{a.answerBody}</p>
+                                  <p className="question-time">
+                                    Answered {moment(a.answeredOn).fromNow()}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          ))
+                        ) : (
+                          <p>This user hasn't posted any answers yet.</p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

@@ -6,6 +6,7 @@
   border-radius: 12px;
   backdrop-filter: blur(12px);
   padding: 2rem;
+  margin-top: 1.5rem;
   overflow: hidden;
 }
 
