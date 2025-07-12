@@ -2,6 +2,8 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import "./HomeMainbar.css"
+import "./Questions.filter.css"
+import { useState } from "react"
 import QuestionList from "./QuestionList"
 
 const HomeMainbar = () => {
@@ -9,6 +11,7 @@ const HomeMainbar = () => {
   const user = 1
   const navigate = useNavigate()
   const questionsList = useSelector((state) => state.questionsReducer)
+  const [selectedTag, setSelectedTag] = useState(null)
 
   const checkAuth = () => {
     if (user === null) {
@@ -18,6 +21,11 @@ const HomeMainbar = () => {
       navigate("/AskQuestion")
     }
   }
+
+  // Filter questions by selected tag if any
+  const filteredQuestions = selectedTag
+    ? questionsList.data?.filter(q => q.questionTags.includes(selectedTag))
+    : questionsList.data
 
   return (
     <div className="main-bar">
@@ -43,6 +51,13 @@ const HomeMainbar = () => {
           Ask Question
         </button>
       </div>
+      {selectedTag && (
+        <div className="tag-filter-bar">
+          <span>Filtering by tag: </span>
+          <span className="tag tag-filter">{selectedTag}</span>
+          <button className="clear-tag-filter" onClick={() => setSelectedTag(null)}>Clear</button>
+        </div>
+      )}
       <div className="questions-section">
         {questionsList.data === null ? (
           <div className="loading-container">
@@ -52,9 +67,9 @@ const HomeMainbar = () => {
         ) : (
           <>
             <div className="questions-count">
-              <span className="count-badge">{questionsList.data.length} questions</span>
+              <span className="count-badge">{filteredQuestions.length} questions</span>
             </div>
-            <QuestionList questionsList={questionsList.data} />
+            <QuestionList questionsList={filteredQuestions} onTagClick={setSelectedTag} />
           </>
         )}
       </div>

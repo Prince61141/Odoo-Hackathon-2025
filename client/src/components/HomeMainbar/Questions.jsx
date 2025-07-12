@@ -2,11 +2,9 @@ import { Link } from "react-router-dom"
 import moment from "moment"
 import "./Questions.css"
 
-const Questions = ({ question }) => {
+const Questions = ({ question, onTagClick }) => {
   return (
     <div className="display-question-container">
-
-      
       <div className="question-stats">
 
         <div className="stat-item">
@@ -47,7 +45,12 @@ const Questions = ({ question }) => {
         <div className="question-meta">
           <div className="question-tags">
             {question.questionTags.map((tag) => (
-              <span key={tag} className="tag">
+              <span
+                key={tag}
+                className="tag clickable-tag"
+                onClick={() => onTagClick && onTagClick(tag)}
+                style={{ cursor: "pointer" }}
+              >
                 {tag}
               </span>
             ))}
