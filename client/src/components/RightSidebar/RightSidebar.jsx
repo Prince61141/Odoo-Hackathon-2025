@@ -1,12 +1,13 @@
 import "./RightSidebar.css"
 import Widget from "./Widget"
-import WidgetTags from "./WidgetTags"
 
 const RightSidebar = () => {
   return (
     <aside className="right-sidebar">
-      <Widget />
-      <WidgetTags />
+      <Widget type="blog" />
+      <Widget type="meta" />
+      <Widget type="hot" />
+      <Widget type="tags" />
     </aside>
   )
 }
