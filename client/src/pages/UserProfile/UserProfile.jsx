@@ -40,7 +40,6 @@ const UserProfile = ({ slideIn, handleSlideIn }) => {
                 <div className="user-details">
                   <div className="avatar-container">
                     <Avatar
-                      backgroundColor="purple"
                       color="white"
                       fontSize="50px"
                       px="40px"

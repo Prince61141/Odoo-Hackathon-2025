@@ -1,10 +1,21 @@
 "use client"
 
-import "./Users.css"
-import LeftSidebar from "../../components/LeftSidebar/LeftSidebar"
-import UsersList from "./UsersList"
+
+import "./Users.css";
+import LeftSidebar from "../../components/LeftSidebar/LeftSidebar";
+import UsersList from "./UsersList";
+
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { fetchAllUsers } from "../../actions/users";
+
 
 const Users = ({ slideIn, handleSlideIn }) => {
+  const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+  }, [dispatch]);
   return (
     <div className="users-page">
       <div className="users-background">
@@ -41,7 +52,13 @@ const Users = ({ slideIn, handleSlideIn }) => {
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.35-4.35"></path>
               </svg>
-              <input type="text" placeholder="Search users..." className="search-input" />
+              <input
+                type="text"
+                placeholder="Search users..."
+                className="search-input"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
             </div>
             <div className="filter-buttons">
               <button className="filter-btn active">All Users</button>
@@ -50,11 +67,11 @@ const Users = ({ slideIn, handleSlideIn }) => {
             </div>
           </div>
 
-          <UsersList />
+          <UsersList search={search} />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Users

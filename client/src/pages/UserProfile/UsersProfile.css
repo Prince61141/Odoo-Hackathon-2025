@@ -88,7 +88,7 @@
 .user-details-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   padding: 2rem;
   margin-top: -80px;
   position: relative;
@@ -97,7 +97,7 @@
 
 .user-details {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 2rem;
 }
 
