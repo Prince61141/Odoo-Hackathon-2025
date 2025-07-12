@@ -4,9 +4,9 @@
   top: 0;
   z-index: 50;
   width: 100%;
-  background: rgba(20, 20, 20, 0.85);
+  background: rgba(0, 0, 0, 0.85);
   border-bottom: 1px solid #222831;
-  backdrop-filter: blur(12px);
+  /* backdrop-filter: blur(12px); */
   box-shadow: 0 2px 12px #00000022;
 }
 

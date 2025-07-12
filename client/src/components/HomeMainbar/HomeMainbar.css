@@ -5,6 +5,7 @@
   border-radius: 12px;
   backdrop-filter: blur(12px);
   padding: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .main-bar-header {

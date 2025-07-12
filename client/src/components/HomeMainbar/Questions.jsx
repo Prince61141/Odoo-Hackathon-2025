@@ -5,11 +5,14 @@ import "./Questions.css"
 const Questions = ({ question }) => {
   return (
     <div className="display-question-container">
+
+      
       <div className="question-stats">
+
         <div className="stat-item">
           <div className="vote-section">
             <button className="vote-btn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="6" height="6" fill="none" stroke="currentColor" strokeWidth="2">
                 <polyline points="18,15 12,9 6,15"></polyline>
               </svg>
             </button>
@@ -23,12 +26,15 @@ const Questions = ({ question }) => {
           </div>
         </div>
 
+
         <div className="stat-item">
           <div className="answer-count">
             <span className="answer-number">{question.noOfAnswers}</span>
             <span className="answer-label">answers</span>
           </div>
         </div>
+
+
       </div>
 
       <div className="question-content">
