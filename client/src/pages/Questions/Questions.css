@@ -163,6 +163,7 @@
   line-height: 1.6;
   margin-bottom: 1.5rem;
   white-space: pre-line;
+  text-align: start;
 }
 
 .question-details-tags {
@@ -532,6 +533,10 @@
   color: #0891b2;
 }
 
+.ql-toolbar.ql-snow + .ql-container.ql-snow{
+  height: 250px;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -586,3 +591,5 @@
     align-items: flex-start;
   }
 }
+
+

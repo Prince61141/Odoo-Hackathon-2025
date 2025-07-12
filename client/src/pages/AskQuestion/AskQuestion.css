@@ -409,6 +409,10 @@
   color: white;
 }
 
+.ql-toolbar.ql-snow + .ql-container.ql-snow{
+  height: 250px;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

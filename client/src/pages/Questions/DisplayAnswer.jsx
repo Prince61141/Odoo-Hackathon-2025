@@ -1,8 +1,12 @@
-import moment from "moment"
-import { Link, useParams } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
-import Avatar from "../../components/Avatar/Avatar"
-import { deleteAnswer } from "../../actions/question"
+
+import moment from "moment";
+import { Link, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import Avatar from "../../components/Avatar/Avatar";
+import { deleteAnswer } from "../../actions/question";
+import { useEffect } from "react";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
 
 const DisplayAnswer = ({ question, handleShare }) => {
   const User = useSelector((state) => state.currentUserReducer)
@@ -13,12 +17,18 @@ const DisplayAnswer = ({ question, handleShare }) => {
     dispatch(deleteAnswer(id, answerId, noOfAnswers - 1))
   }
 
+  useEffect(() => {
+    document.querySelectorAll('.answer-body pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  }, [question.answer]);
+
   return (
     <div className="answers-list">
       {question.answer.map((ans) => (
         <div className="answer-card" key={ans._id}>
           <div className="answer-content">
-            <div className="answer-body">{ans.answerBody}</div>
+            <div className="answer-body" dangerouslySetInnerHTML={{ __html: ans.answerBody }} />
 
             <div className="answer-actions">
               <div className="action-buttons">

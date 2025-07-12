@@ -1,23 +1,23 @@
-"use client"
-
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import "./AskQuestion.css"
-import { askQuestion } from "../../actions/question"
+import { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "./AskQuestion.css";
+import { askQuestion } from "../../actions/question";
 
 const AskQuestion = () => {
-  const [questionTitle, setQuestionTitle] = useState("")
-  const [questionBody, setQuestionBody] = useState("")
-  const [questionTags, setQuestionTags] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useDispatch()
-  const User = useSelector((state) => state.currentUserReducer)
-  const navigate = useNavigate()
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionBody, setQuestionBody] = useState("");
+  const [questionTags, setQuestionTags] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const User = useSelector((state) => state.currentUserReducer);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     if (User) {
       if (questionTitle && questionBody && questionTags) {
@@ -29,29 +29,23 @@ const AskQuestion = () => {
               questionTags,
               userPosted: User.result.name,
             },
-            navigate,
-          ),
-        )
+            navigate
+          )
+        );
       } else {
-        alert("Please enter all the fields")
-        setIsLoading(false)
+        alert("Please enter all the fields");
+        setIsLoading(false);
       }
     } else {
-      alert("Login to ask question")
-      setIsLoading(false)
+      alert("Login to ask question");
+      setIsLoading(false);
     }
 
     // Simulate loading time
     setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
-  }
-
-  const handleEnter = (e) => {
-    if (e.key === "Enter") {
-      setQuestionBody(questionBody + "\n")
-    }
-  }
+      setIsLoading(false);
+    }, 2000);
+  };
 
   return (
     <div className="ask-question">
@@ -67,7 +61,9 @@ const AskQuestion = () => {
         <div className="ask-header">
           <div className="header-content">
             <h1 className="ask-title">Ask a Public Question</h1>
-            <p className="ask-subtitle">Get help from millions of developers worldwide</p>
+            <p className="ask-subtitle">
+              Get help from millions of developers worldwide
+            </p>
           </div>
           <div className="tips-card">
             <h3>Writing a good question</h3>
@@ -84,12 +80,21 @@ const AskQuestion = () => {
             <div className="form-group">
               <label htmlFor="ask-ques-title" className="form-label">
                 <div className="label-header">
-                  <svg className="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    className="label-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
                     <path d="M4 6h16M4 12h16M4 18h7"></path>
                   </svg>
                   <h4>Title</h4>
                 </div>
-                <p className="label-description">Be specific and imagine you're asking a question to another person</p>
+                <p className="label-description">
+                  Be specific and imagine you're asking a question to another
+                  person
+                </p>
               </label>
               <div className="input-container">
                 <input
@@ -107,7 +112,13 @@ const AskQuestion = () => {
             <div className="form-group">
               <label htmlFor="ask-ques-body" className="form-label">
                 <div className="label-header">
-                  <svg className="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    className="label-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                     <polyline points="14,2 14,8 20,8"></polyline>
                     <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -117,42 +128,46 @@ const AskQuestion = () => {
                   <h4>Body</h4>
                 </div>
                 <p className="label-description">
-                  Include all the information someone would need to answer your question
+                  Include all the information someone would need to answer your
+                  question
                 </p>
               </label>
               <div className="textarea-container">
-                <textarea
+                <ReactQuill
                   id="ask-ques-body"
                   value={questionBody}
-                  onChange={(e) => setQuestionBody(e.target.value)}
-                  onKeyPress={handleEnter}
-                  rows="12"
+                  onChange={setQuestionBody}
                   className="form-textarea"
                   placeholder="Describe your problem in detail..."
-                ></textarea>
+                  modules={{
+                    toolbar: [
+                      [{ header: [1, 2, false] }],
+                      ["bold", "italic", "underline", "strike"],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      ["code-block", "blockquote"],
+                      ["link", "image"],
+                      ["clean"],
+                    ],
+                  }}
+                  formats={[
+                    "header",
+                    "bold",
+                    "italic",
+                    "underline",
+                    "strike",
+                    "list",
+                    "bullet",
+                    "code-block",
+                    "blockquote",
+                    "link",
+                    "image",
+                  ]}
+                />
                 <div className="textarea-border"></div>
                 <div className="textarea-toolbar">
-                  <div className="toolbar-buttons">
-                    <button type="button" className="toolbar-btn">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
-                        <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
-                      </svg>
-                    </button>
-                    <button type="button" className="toolbar-btn">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M6 4h10l4 4-4 4H6z"></path>
-                      </svg>
-                    </button>
-                    <button type="button" className="toolbar-btn">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polyline points="4 7 4 4 20 4 20 7"></polyline>
-                        <line x1="9" y1="20" x2="15" y2="20"></line>
-                        <line x1="12" y1="4" x2="12" y2="20"></line>
-                      </svg>
-                    </button>
-                  </div>
-                  <span className="char-count">{questionBody.length} characters</span>
+                  <span className="char-count">
+                    {questionBody.replace(/<[^>]+>/g, "").length} characters
+                  </span>
                 </div>
               </div>
             </div>
@@ -160,13 +175,21 @@ const AskQuestion = () => {
             <div className="form-group">
               <label htmlFor="ask-ques-tags" className="form-label">
                 <div className="label-header">
-                  <svg className="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    className="label-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
                     <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
                     <line x1="7" y1="7" x2="7.01" y2="7"></line>
                   </svg>
                   <h4>Tags</h4>
                 </div>
-                <p className="label-description">Add up to 5 tags to describe what your question is about</p>
+                <p className="label-description">
+                  Add up to 5 tags to describe what your question is about
+                </p>
               </label>
               <div className="input-container">
                 <input
@@ -202,7 +225,13 @@ const AskQuestion = () => {
                 </div>
               ) : (
                 <>
-                  <svg className="submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    className="submit-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
                     <path d="M9 12l2 2 4-4"></path>
                     <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"></path>
                     <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"></path>
@@ -218,7 +247,7 @@ const AskQuestion = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AskQuestion
+export default AskQuestion;

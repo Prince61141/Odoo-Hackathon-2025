@@ -1,18 +1,33 @@
-import { useState } from "react"
-import { useParams, Link, useNavigate, useLocation } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
-import moment from "moment"
-import copy from "copy-to-clipboard"
-import "./Questions.css"
-import Avatar from "../../components/Avatar/Avatar"
-import DisplayAnswer from "./DisplayAnswer"
-import { postAnswer, deleteQuestion, voteQuestion } from "../../actions/question"
-
+import { useState, useEffect, useRef } from "react";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
+import copy from "copy-to-clipboard";
+import "./Questions.css";
+import Avatar from "../../components/Avatar/Avatar";
+import DisplayAnswer from "./DisplayAnswer";
+import {
+  postAnswer,
+  deleteQuestion,
+  voteQuestion,
+} from "../../actions/question";
 
 const QuestionsDetails = () => {
   const { id } = useParams();
   const questionsList = useSelector((state) => state.questionsReducer);
   const [Answer, setAnswer] = useState("");
+  const questionBodyRef = useRef(null);
+  useEffect(() => {
+    if (questionBodyRef.current) {
+      questionBodyRef.current.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+    }
+  }, [questionsList.data, id]);
   const [isLoading, setIsLoading] = useState(false);
   const [sortType, setSortType] = useState("newest");
   const Navigate = useNavigate();
@@ -24,11 +39,15 @@ const QuestionsDetails = () => {
   const getSortedAnswers = (answers) => {
     if (!Array.isArray(answers)) return [];
     if (sortType === "oldest") {
-      return [...answers].sort((a, b) => new Date(a.answeredOn) - new Date(b.answeredOn));
+      return [...answers].sort(
+        (a, b) => new Date(a.answeredOn) - new Date(b.answeredOn)
+      );
     } else if (sortType === "votes") {
       return [...answers].sort((a, b) => (b.votes || 0) - (a.votes || 0));
     } else {
-      return [...answers].sort((a, b) => new Date(b.answeredOn) - new Date(a.answeredOn));
+      return [...answers].sort(
+        (a, b) => new Date(b.answeredOn) - new Date(a.answeredOn)
+      );
     }
   };
 
@@ -61,29 +80,29 @@ const QuestionsDetails = () => {
   const handleShare = () => {
     copy(url + location.pathname);
     alert("Copied url : " + url + location.pathname);
-  }
+  };
 
   const handleDelete = () => {
-    dispatch(deleteQuestion(id, Navigate))
-  }
+    dispatch(deleteQuestion(id, Navigate));
+  };
 
   const handleUpVote = () => {
     if (User === null) {
-      alert("Login or Signup to up vote a question")
-      Navigate("/Auth")
+      alert("Login or Signup to up vote a question");
+      Navigate("/Auth");
     } else {
-      dispatch(voteQuestion(id, "upVote"))
+      dispatch(voteQuestion(id, "upVote"));
     }
-  }
+  };
 
   const handleDownVote = () => {
     if (User === null) {
-      alert("Login or Signup to down vote a question")
-      Navigate("/Auth")
+      alert("Login or Signup to down vote a question");
+      Navigate("/Auth");
     } else {
-      dispatch(voteQuestion(id, "downVote"))
+      dispatch(voteQuestion(id, "downVote"));
     }
-  }
+  };
 
   return (
     <div className="question-details-page">
@@ -140,21 +159,41 @@ const QuestionsDetails = () => {
 
                   <div className="question-details-container-2">
                     <div className="question-votes">
-                      <button className="vote-btn vote-up" onClick={handleUpVote}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <button
+                        className="vote-btn vote-up"
+                        onClick={handleUpVote}
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
                           <polyline points="18,15 12,9 6,15"></polyline>
                         </svg>
                       </button>
-                      <div className="vote-count">{question.upVote.length - question.downVote.length}</div>
-                      <button className="vote-btn vote-down" onClick={handleDownVote}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <div className="vote-count">
+                        {question.upVote.length - question.downVote.length}
+                      </div>
+                      <button
+                        className="vote-btn vote-down"
+                        onClick={handleDownVote}
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
                           <polyline points="6,9 12,15 18,9"></polyline>
                         </svg>
                       </button>
                     </div>
 
                     <div className="question-content-area">
-                      <div className="question-body">{question.questionBody}</div>
+                      <div className="question-body" ref={questionBodyRef}>
+                        <div dangerouslySetInnerHTML={{ __html: question.questionBody }} />
+                      </div>
 
                       <div className="question-details-tags">
                         {question.questionTags.map((tag) => (
@@ -166,8 +205,17 @@ const QuestionsDetails = () => {
 
                       <div className="question-actions-user">
                         <div className="action-buttons">
-                          <button type="button" className="action-btn" onClick={handleShare}>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <button
+                            type="button"
+                            className="action-btn"
+                            onClick={handleShare}
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
                               <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
                               <polyline points="16,6 12,2 8,6"></polyline>
                               <line x1="12" y1="2" x2="12" y2="15"></line>
@@ -175,8 +223,17 @@ const QuestionsDetails = () => {
                             Share
                           </button>
                           {User?.result?._id === question?.userId && (
-                            <button type="button" className="action-btn delete-btn" onClick={handleDelete}>
-                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <button
+                              type="button"
+                              className="action-btn delete-btn"
+                              onClick={handleDelete}
+                            >
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
                                 <polyline points="3,6 5,6 21,6"></polyline>
                                 <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"></path>
                               </svg>
@@ -186,13 +243,25 @@ const QuestionsDetails = () => {
                         </div>
 
                         <div className="user-info">
-                          <Link to={`/Users/${question.userId}`} className="user-link">
-                            <Avatar backgroundColor="orange" px="8px" py="5px" borderRadius="4px">
+                          <Link
+                            to={`/Users/${question.userId}`}
+                            className="user-link"
+                          >
+                            <Avatar
+                              backgroundColor="orange"
+                              px="8px"
+                              py="5px"
+                              borderRadius="4px"
+                            >
                               {question.userPosted.charAt(0).toUpperCase()}
                             </Avatar>
                             <div className="user-detail">
-                              <div className="username">{question.userPosted}</div>
-                              <div className="user-meta">asked {moment(question.askedOn).fromNow()}</div>
+                              <div className="username">
+                                {question.userPosted}
+                              </div>
+                              <div className="user-meta">
+                                asked {moment(question.askedOn).fromNow()}
+                              </div>
                             </div>
                           </Link>
                         </div>
@@ -205,15 +274,44 @@ const QuestionsDetails = () => {
                   <section className="answers-section">
                     <div className="answers-header">
                       <h3 className="answers-title">
-                        {question.noOfAnswers} {question.noOfAnswers === 1 ? "Answer" : "Answers"}
+                        {question.noOfAnswers}{" "}
+                        {question.noOfAnswers === 1 ? "Answer" : "Answers"}
                       </h3>
                       <div className="sort-options">
-                        <button className={`sort-btn${sortType === "newest" ? " active" : ""}`} onClick={() => setSortType("newest")}>Newest</button>
-                        <button className={`sort-btn${sortType === "oldest" ? " active" : ""}`} onClick={() => setSortType("oldest")}>Oldest</button>
-                        <button className={`sort-btn${sortType === "votes" ? " active" : ""}`} onClick={() => setSortType("votes")}>Votes</button>
+                        <button
+                          className={`sort-btn${
+                            sortType === "newest" ? " active" : ""
+                          }`}
+                          onClick={() => setSortType("newest")}
+                        >
+                          Newest
+                        </button>
+                        <button
+                          className={`sort-btn${
+                            sortType === "oldest" ? " active" : ""
+                          }`}
+                          onClick={() => setSortType("oldest")}
+                        >
+                          Oldest
+                        </button>
+                        <button
+                          className={`sort-btn${
+                            sortType === "votes" ? " active" : ""
+                          }`}
+                          onClick={() => setSortType("votes")}
+                        >
+                          Votes
+                        </button>
                       </div>
                     </div>
-                    <DisplayAnswer key={question._id} question={{...question, answer: getSortedAnswers(question.answer)}} handleShare={handleShare} />
+                    <DisplayAnswer
+                      key={question._id}
+                      question={{
+                        ...question,
+                        answer: getSortedAnswers(question.answer),
+                      }}
+                      handleShare={handleShare}
+                    />
                   </section>
                 )}
 
@@ -221,37 +319,51 @@ const QuestionsDetails = () => {
                   <h3 className="answer-form-title">Your Answer</h3>
                   <form
                     onSubmit={(e) => {
-                      handlePostAns(e, question.answer.length)
+                      handlePostAns(e, question.answer.length);
                     }}
                     className="answer-form"
                   >
                     <div className="textarea-container">
-                      <textarea
+                      <ReactQuill
+                      height="200px"
                         value={Answer}
-                        onChange={(e) => setAnswer(e.target.value)}
-                        placeholder="Write your answer here..."
-                        rows="10"
-                        className="answer-textarea"
-                      ></textarea>
+                        onChange={setAnswer}
+                        modules={{
+                          toolbar: [
+                            [{ header: [1, 2, false] }],
+                            ["bold", "italic", "underline", "strike"],
+                            [{ list: "ordered" }, { list: "bullet" }],
+                            ["code-block", "blockquote"],
+                            ["link", "image"],
+                            ["clean"],
+                          ],
+                        }}
+                        formats={[
+                          "header",
+                          "bold",
+                          "italic",
+                          "underline",
+                          "strike",
+                          "list",
+                          "bullet",
+                          "code-block",
+                          "blockquote",
+                          "link",
+                          "image",
+                        ]}
+                      />
                       <div className="textarea-toolbar">
-                        <div className="formatting-buttons">
-                          <button type="button" className="format-btn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
-                              <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
-                            </svg>
-                          </button>
-                          <button type="button" className="format-btn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M6 4h10l4 4-4 4H6z"></path>
-                            </svg>
-                          </button>
-                        </div>
-                        <span className="char-count">{Answer.length} characters</span>
+                        <span className="char-count">
+                          {Answer.replace(/<[^>]+>/g, "").length} characters
+                        </span>
                       </div>
                     </div>
 
-                    <button type="submit" className="post-ans-btn" disabled={isLoading}>
+                    <button
+                      type="submit"
+                      className="post-ans-btn"
+                      disabled={isLoading}
+                    >
                       {isLoading ? (
                         <div className="loading-content">
                           <div className="loading-spinner-small"></div>
@@ -259,7 +371,12 @@ const QuestionsDetails = () => {
                         </div>
                       ) : (
                         <>
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
                             <path d="M9 12l2 2 4-4"></path>
                             <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"></path>
                             <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"></path>
@@ -290,7 +407,7 @@ const QuestionsDetails = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default QuestionsDetails
+export default QuestionsDetails;
