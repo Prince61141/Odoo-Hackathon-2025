@@ -1,3 +1,6 @@
+# Video Link : 
+https://drive.google.com/drive/folders/1oKWT4udioKMv5W1rBY-2MwT-98mKS7QY?usp=drive_link
+
 # StackIt – Minimal Q&A Forum Platform
 
 StackIt is a minimal question-and-answer platform focused on collaborative learning and structured knowledge sharing. It’s designed to be simple, user-friendly, and centered on the core experience of asking and answering questions within a community.
