@@ -1,18 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import decode from "jwt-decode";
 import { Bell } from "lucide-react";
-
 import search from "../../assets/search-solid.svg";
 import Avatar from "../../components/Avatar/Avatar";
 import "./Navbar.css";
+import "./notification.css";
 import { setCurrentUser } from "../../actions/currentUser";
 
 const Navbar = ({ handleSlideIn }) => {
   const dispatch = useDispatch();
   var User = useSelector((state) => state.currentUserReducer);
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
@@ -62,9 +63,21 @@ const Navbar = ({ handleSlideIn }) => {
               className="modern-search-input"
             />
           </div>
-          <button className="modern-bell-btn">
+          <button className="modern-bell-btn" onClick={() => setShowNotifications((prev) => !prev)}>
             <Bell size={20} />
           </button>
+          {showNotifications && (
+            <div className="notification-bar">
+              <div className="notification-header">
+                <span>Notifications</span>
+                <button className="close-notification-btn" onClick={() => setShowNotifications(false)}>&times;</button>
+              </div>
+              <ul className="notification-list">
+                <li className="notification-item">You have a new answer on your question!</li>
+                <li className="notification-item">Welcome to StackIt! 🎉</li>
+              </ul>
+            </div>
+          )}
           {User === null ? (
             <Link to="/Auth" className="modern-login-btn">
               Log in

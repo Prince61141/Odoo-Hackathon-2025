@@ -2,6 +2,11 @@
 
 StackIt is a minimal question-and-answer platform focused on collaborative learning and structured knowledge sharing. It’s designed to be simple, user-friendly, and centered on the core experience of asking and answering questions within a community.
 
+
+## Team Members 👥
+  - Prince Ghoda 🛠️
+  - Rohit Pagi 🚀 🎨
+
 ## Table of Contents
 
 - [Features](#features)
@@ -102,6 +107,10 @@ npm start
 
 Contributions are welcome! Please open issues or submit pull requests for new features or bug fixes.
 
-## License
+## License 📄
 
-This project is licensed under
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact 📧
+
+For questions or feedback, please contact [Prince Ghoda](mailto:princepatel61141@gmail.com).
