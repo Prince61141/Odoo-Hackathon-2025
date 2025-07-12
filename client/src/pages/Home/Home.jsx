@@ -15,4 +15,4 @@ const Home = ({ slideIn }) => {
   )
 }
 
-export default Home
+export default Home;

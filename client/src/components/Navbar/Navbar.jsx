@@ -4,12 +4,10 @@ import { useSelector, useDispatch } from "react-redux";
 import decode from "jwt-decode";
 import { Bell } from "lucide-react";
 
-import logo from "../../assets/logo.png";
 import search from "../../assets/search-solid.svg";
 import Avatar from "../../components/Avatar/Avatar";
 import "./Navbar.css";
 import { setCurrentUser } from "../../actions/currentUser";
-import bars from "../../assets/bars-solid.svg";
 
 const Navbar = ({ handleSlideIn }) => {
   const dispatch = useDispatch();
